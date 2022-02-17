@@ -1,14 +1,14 @@
 import type { NextPage } from "next";
 import Image from "next/image";
 import Layout from "../components/Layout";
-import imgg from "../public/sergey-zolkin-_UeY8aTI6d0-unsplash.jpg";
+import dynamic from "next/dynamic";
 
 const Home: NextPage = () => {
   const backUrl: string =
     "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80";
 
   return (
-    <Layout>
+    <Layout title="Home">
       <div className="dark:bg-gray-800">
         <div
           className="w-full bg-center bg-cover h-[32rem]"
@@ -157,7 +157,6 @@ const Home: NextPage = () => {
                         <p className="text-gray-500 dark:text-gray-300">
                             You can ask questions that can be answered by other developers
                         </p>
-
                     </div>
                 </div>
             </div>
@@ -264,4 +263,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default dynamic(() => Promise.resolve(Home), {ssr: false})

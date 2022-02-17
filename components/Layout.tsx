@@ -97,7 +97,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const Layout = ({ children }) => {
+const Layout = ({ children, title }) => {
   const router = useRouter()
   const cart:any ={
     cartItems: []
@@ -108,7 +108,8 @@ const Layout = ({ children }) => {
   return (
     <div>
       <Head>
-        <title>HeyPI</title>
+        
+        <title>{title?`${title}-HeyPI`: "HeyPi"} </title>
       </Head>
 
       <Popover className="relative bg-white dark:bg-gray-800">
@@ -117,7 +118,7 @@ const Layout = ({ children }) => {
             <div className="flex justify-start lg:w-0 lg:flex-1">
               <span className="sr-only">Workflow</span>
               <Link href="/" passHref>
-                <h1 className="text-2xl dark:text-gray-300 font-medium">HeyPI</h1>
+                <h1 className="text-2xl dark:text-gray-300 cursor-pointer font-medium">HeyPI</h1>
               </Link>
             </div>
             <div className="-mr-2 -my-2 md:hidden">
