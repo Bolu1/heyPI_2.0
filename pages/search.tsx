@@ -2,10 +2,25 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import axios from 'axios'
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 
 const Search = () => {
+    const router = useRouter()
+    const[search, setSearch] = useState("")
     const[loading, setLoading] = useState(false)
     const[data, setData] = useState([])
+
+    const submitHandler = async(e):Promise<void> =>{
+      e.preventDefault()
+      setLoading(true)
+        try{
+          const result = await axios.post('http://localhost:8000/look', {search})
+          setData(result.data)
+    }catch(e){
+        console.log(e)
+    }
+    setLoading(false)
+    }
 
     useEffect(():void => {
         setLoading(true)
@@ -37,13 +52,15 @@ const Search = () => {
       <div style={{ minHeight: "90vh" }} className="dark:bg-gray-900 ">
         <div className="flex justify-center py-10">
           <div className="mb-3 xl:w-96">
-            <div className="input-group relative flex  items-stretch w-full mb-4 rounded">
+            <form onSubmit={submitHandler} className="input-group relative flex  items-stretch w-full mb-4 rounded">
               <input
                 type="search"
                 className="form-control dark:bg-gray-700 dark:text-white relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0   focus:border-blue-600 focus:outline-none"
                 placeholder="Search"
                 aria-label="Search"
                 aria-describedby="button-addon2"
+                value={search}
+                onChange={(e)=>setSearch(e.target.value)}
               />
               <span
                 className="input-group-text flex items-center cursor-pointer px-3 py-1.5 text-base font-normal text-gray-700 text-center whitespace-nowrap rounded"
@@ -54,10 +71,11 @@ const Search = () => {
                   focusable="false"
                   data-prefix="fas"
                   data-icon="search"
-                  className="w-4"
+                  className="w-4 cursor-pointer"
                   role="img"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 512 512"
+                  onClick={submitHandler}
                 >
                   <path
                     fill="currentColor"
@@ -65,14 +83,15 @@ const Search = () => {
                   ></path>
                 </svg>
               </span>
-            </div>
+            </form>
           </div>
           
         </div>
         {/* results */}
         <div >
+            {console.log(data)}
         {data.length>0 ? data.map( (d) =>(
-          <div key={d._id} className="p-6 mx-16 mt-4 sm:p-12 cursor-pointer bg-gray-100 dark:bg-gray-800 dark:text-coolGray-100">
+          <div onClick={()=>router.push(`/code/${d._id}`)} key={d._id} className="p-6 mx-16 mt-4 sm:p-12 cursor-pointer bg-gray-100 dark:bg-gray-800 dark:text-coolGray-100">
             <div className="flex flex-col space-y-4 md:space-y-0 md:space-x-6 md:flex-row">
               <img
                 src="https://source.unsplash.com/75x75/?portrait"
@@ -84,10 +103,11 @@ const Search = () => {
                   {d.email}
                   
                 </h4>
-                <div className="space-y-6">
-                <p style={{maxWidth:"70%", padding:"1em", whiteSpace:"break-spaces"}} className="text-base font-light leading-relaxed mt-0 mb-4 text-gray-800">
+                <div  className="space-y-6">
+                <p className="text-base  mt-0 mb-4 text-gray-300">
                     {d.description}  
-                    </p></div>
+                    </p>
+                    </div>
               </div>
             </div>
             </div> )): 
