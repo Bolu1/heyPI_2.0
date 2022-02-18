@@ -8,7 +8,7 @@ const Search = () => {
     const[data, setData] = useState([])
 
     useEffect(():void => {
-        setLoading(!loading)
+        setLoading(true)
         var result
         const fetch  = async():Promise<void> =>{
             try{
@@ -17,7 +17,6 @@ const Search = () => {
             }catch(e){
                 console.log(e)
             }
-            console.log(data)
         }
         fetch()
         setLoading(false)
@@ -35,7 +34,7 @@ const Search = () => {
     <Layout title="Search">
     
         
-      <div style={{ minHeight: "90vh" }} className="dark:bg-gray-800 ">
+      <div style={{ minHeight: "90vh" }} className="dark:bg-gray-900 ">
         <div className="flex justify-center py-10">
           <div className="mb-3 xl:w-96">
             <div className="input-group relative flex  items-stretch w-full mb-4 rounded">
@@ -73,7 +72,7 @@ const Search = () => {
         {/* results */}
         <div >
         {data.length>0 ? data.map( (d) =>(
-          <div key={d._id} className="p-6 mx-16 mt-4 sm:p-12 dark:bg-gray-700 dark:text-coolGray-100">
+          <div key={d._id} className="p-6 mx-16 mt-4 sm:p-12 cursor-pointer bg-gray-100 dark:bg-gray-800 dark:text-coolGray-100">
             <div className="flex flex-col space-y-4 md:space-y-0 md:space-x-6 md:flex-row">
               <img
                 src="https://source.unsplash.com/75x75/?portrait"
@@ -82,14 +81,13 @@ const Search = () => {
               />
               <div className="flex flex-col">
                 <h4 className="text-lg font-semibold text-center md:text-left  dark:text-gray-300">
-                  Leroy Jenkins
+                  {d.email}
+                  
                 </h4>
-                <p className="dark:text-coolGray-400  dark:text-gray-300">
-                  Sed non nibh iaculis, posuere diam vitae, consectetur neque.
-                  Integer velit ligula, semper sed nisl in, cursus commodo elit.
-                  Pellentesque sit amet mi luctus ligula euismod lobortis
-                  ultricies et nibh.
-                </p>
+                <div className="space-y-6">
+                <p style={{maxWidth:"70%", padding:"1em", whiteSpace:"break-spaces"}} className="text-base font-light leading-relaxed mt-0 mb-4 text-gray-800">
+                    {d.description}  
+                    </p></div>
               </div>
             </div>
             </div> )): 

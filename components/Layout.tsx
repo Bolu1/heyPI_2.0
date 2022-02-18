@@ -112,7 +112,7 @@ const Layout = ({ children, title }) => {
         <title>{title?`${title}-HeyPI`: "HeyPi"} </title>
       </Head>
 
-      <Popover className="relative bg-white dark:bg-gray-800">
+      <Popover className="relative bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex justify-between items-center py-6 md:justify-start md:space-x-10">
             <div className="flex justify-start lg:w-0 lg:flex-1">
@@ -130,30 +130,23 @@ const Layout = ({ children, title }) => {
             <Popover.Group as="nav" className="hidden md:flex space-x-10">
               
             <Link href="/" passHref>
-                <p className="text-base font-medium dark:text-gray-300 text-gray-500 hover:text-gray-900"> Home</p>
+                <p className="text-base font-medium cursor-pointer dark:text-gray-300 text-gray-500 hover:text-gray-900"> Home</p>
                
               </Link>
 
-              <a
-                href="/search"
-                className="text-base font-medium dark:text-gray-300 text-gray-500 hover:text-gray-900"
-              >
-                Search
-              </a>
+              <Link href="/search" passHref>
+              <p className="text-base font-medium cursor-pointer dark:text-gray-300 text-gray-500 hover:text-gray-900">Search</p>
+              </Link>
 
-              <a
-                href="/community"
-                className="text-base font-medium dark:text-gray-300 text-gray-500 hover:text-gray-900"
-              >
-                Community
-              </a>
+              <Link href="/community" passHref>
+              <p className="text-base font-medium cursor-pointer dark:text-gray-300 text-gray-500 hover:text-gray-900">Community</p>
+               
+              </Link>
 
-              <a
-                href="/aboutus"
-                className="text-base font-medium text-gray-500 dark:text-gray-300 hover:text-gray-900"
-              >
-                About
-              </a>
+              <Link href="/about" passHref>
+              <p className="text-base font-medium cursor-pointer dark:text-gray-300 text-gray-500 hover:text-gray-900">About</p>
+               
+              </Link>
 
             </Popover.Group>
             <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
