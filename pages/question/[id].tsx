@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Layout from "../components/Layout";
+import Layout from "../../components/Layout";
 import axios from 'axios'
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import ReactPaginate from "react-paginate";
 
-const Search = () => {
+const Question = () => {
     const router = useRouter()
     const[search, setSearch] = useState("")
     const[loading, setLoading] = useState(true)
@@ -24,9 +24,10 @@ const Search = () => {
     }
 
     const handlePageClick = async(data):Promise<any> =>{
-        setLoading(true)
+        setLoading(true)     
         try{
-          const result = await axios.post(`http://localhost:8000/look?page=${data.selected}`, {search})
+          const{id} = router.query
+          const result = await axios.post(`http://localhost:8000//answers?page=${data.selected}`, {id})
           setData(result.data)
         }catch(e){
           console.log(e)
@@ -39,7 +40,10 @@ const Search = () => {
         var result
         const fetch  = async():Promise<void> =>{
             try{
-                 result = await axios.get('http://localhost:8000/getApis')
+              const{id} = router.query
+              console.log(id)
+                 result = await axios.post('http://localhost:8000/answers', {id})
+                 console.log(result)
                  setData(result.data)
             }catch(e){
                 console.log(e)
@@ -119,9 +123,6 @@ const Search = () => {
                 <p className="text-base  mt-0 mb-4 text-gray-300">
                     {d.description}  
                     </p>
-                    <p className="text-base bg-indigo-600 w-fit p-2 bg-opacity-25 rounded-md mt-0 mb-4 text-gray-300">
-                    {d.language}  
-                    </p>
                     </div>
               </div>
             </div>
@@ -161,4 +162,4 @@ const Search = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(Search), {ssr: false});
+export default dynamic(() => Promise.resolve(Question), {ssr: false});

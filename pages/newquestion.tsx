@@ -6,27 +6,35 @@ import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 
 
-const Newcode = () => {
+const Newquestion = () => {
     const router = useRouter()
     const[loading, setLoading] = useState(false)
-    const[description, setDescription] = useState("")
+    const[title, setTitle] = useState("")
     const[language, setLanguage] = useState("")
-    const[code, setCode] = useState("")
+    const[token, setToken] = useState("")
+    const[name, setName] = useState("")
+    const[description, setDescription] = useState("")
 
     const submitHandler = async():Promise<void> =>{
         setLoading(true)
         try{
-            await axios.post("http://localhost:8000/addc", {description, code, language})
+            await axios.post("http://localhost:8000/askq", {title, description, language, token, name})
             console.log("added")
+            // router.push('/myapi')
         }catch(err){
             console.log(err)
         }
         setLoading(false)
     }
+
     useEffect(():void => {
         if(!Cookies.get('userInfo')){
             router.push('/auth/login')
         }
+        
+        const data = JSON.parse(Cookies.get('userInfo'))
+        setName(data.email)
+        setToken(data.token)
     }, [])
 
   return (
@@ -48,13 +56,13 @@ const Newcode = () => {
             <div className="items-center -mx-2 md:flex">
  
                 <div className="w-full mx-2 mt-4 md:mt-0">
-                    <label className="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200">Description</label>
+                    <label className="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200">Title</label>
 
-                    <input onChange={(e)=>setDescription(e.target.value)} value={description} className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" type="text" required placeholder="e.g An Api to get date ad time on mars"/>
+                    <input onChange={(e)=>setTitle(e.target.value)} value={title} className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" type="text" required placeholder="e.g An Api to get date ad time on mars"/>
                 </div>
             </div>
 
-            <div className="items-center -mx-2 md:flex">
+            <div className="items-center mt-4 -mx-2 md:flex">
  
                 <div className="w-full mx-2 mt-4 md:mt-0">
                     <label className="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200">Language</label>
@@ -65,9 +73,9 @@ const Newcode = () => {
 
 
             <div className="w-full mt-4">
-                <label className="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200">Code</label>
+                <label className="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200">Description</label>
 
-                <textarea onChange={(e)=>setCode(e.target.value)} value={code} className="block w-full h-60 px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40" placeholder="e.g <></>"></textarea>
+                <textarea onChange={(e)=>setDescription(e.target.value)} value={description} className="block w-full h-60 px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40" placeholder="e.g <></>"></textarea>
             </div>
 
             <div className="flex justify-center mt-6">
@@ -80,4 +88,4 @@ const Newcode = () => {
   )
 }
 
-export default dynamic(()=> Promise.resolve(Newcode), {ssr:false})
+export default dynamic(()=> Promise.resolve(Newquestion), {ssr:false})

@@ -3,6 +3,7 @@ import Head from "next/head";
 import { Fragment,useEffect } from "react";
 import { useState } from "react";
 import Link from "next/link";
+import Cookies from 'js-cookie'
 import { Popover, Transition } from "@headlessui/react";
 import {
   BookmarkAltIcon,
@@ -102,8 +103,19 @@ const Layout = ({ children, title }) => {
   const cart:any ={
     cartItems: []
   }
- var userInfo 
- const profile: string | null = null
+
+ var name: string
+ if(Cookies.get('userInfo')){
+    const data = JSON.parse(Cookies.get('userInfo'))
+    const n = data.email.split("@")
+    name = n[0]
+ }
+
+  const logoutHandler = ()=>{
+    
+    Cookies.remove('userInfo')
+    router.push('/')
+  }
 
   return (
     <div>
@@ -152,16 +164,25 @@ const Layout = ({ children, title }) => {
             <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
 
               {/* //checks if userinfo is present if present, show user's name */}
-              {!userInfo ? (
+              {!Cookies.get('userInfo') ? (
                 <a
-                  // onClick={() => router.push("/login")}
+                  onClick={() => router.push("/auth/login")}
                   className="ml-8 cursor-pointer whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
                 >
                   Login
                 </a>
               ) : (
               //  mapping the contents of the drop down on the name componets
+                <>
+                
+                <Link href="/newcode" passHref>
+                <button className=" px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                    New
+                </button>
+                </Link>
+
                 <Popover className="relative">
+                  
                 {({ open }) => (
                   <>
                     <Popover.Button
@@ -171,9 +192,10 @@ const Layout = ({ children, title }) => {
                         "ml-8 whitespace-nowrap cursor-pointer inline-flex items-center justify-center px-4 py-2   rounded-md  text-base font-bold "
                       )}
                     >
+                    
                       
-                      <div className="relative flex-shrink-0 px-2">
-                        <Image src={profile} alt="" className="w-12 h-12 border rounded-full dark:bg-coolGray-500 dark:border-coolGray-700"/>
+                      <div className="relative flex-shrink-0 px-2 text-base font-medium cursor-pointer dark:text-gray-300 text-gray-500">
+                        <h1>{name}</h1>
                       </div>
                      
                       {/* <span>{name}</span> */}
@@ -188,27 +210,28 @@ const Layout = ({ children, title }) => {
                       leaveFrom="opacity-100 translate-y-0"
                       leaveTo="opacity-0 translate-y-1"
                     >
-                      <Popover.Panel className="absolute z-10 left-1/2 transform -translate-x-1/2 mt-3  px-2 w-40 max-w-md sm:px-0">
+                      <Popover.Panel className="absolute z-10 left-1/2 transform -translate-x-1/2 mt-3 px-2 w-40 max-w-md sm:px-0">
                         <div className="rounded-lg text-center shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-                          <div className="relative text-center grid gap-2 bg-white py-1 sm:gap-8 sm:p-8">
-                              <a 
-                              href='/profile'
-                                className="-m-3 cursor-pointer text-center  items-start rounded-lg hover:bg-gray-50"
+                          <div className="relative text-center grid gap-2 bg-white dark:bg-gray-800  py-1 sm:gap-8 sm:p-8">
+                          <a 
+                              href='/newquestion'
+                                className="-m-3 cursor-pointer text-center  items-start rounded-lg hover:bg-gray-700"
                               >
-                                      <p className="text-base text-center dark:text-gray-300">
-                                      profile
+                                      <p  className="text-base text-center cursor-pointer dark:text-gray-300 text-gray-500">
+                                      Ask
                                    </p>
                               </a>
                               <a 
-                              href='/order-history'
-                                className="-m-3 cursor-pointer text-center  items-start rounded-lg hover:bg-gray-50"
+                              href='/myapi'
+                                className="-m-3 cursor-pointer text-center  items-start rounded-lg hover:bg-gray-700"
                               >
-                                      <p  className="text-base text-center dark:text-gray-300">
-                                      orders
+                                      <p  className="text-base text-center cursor-pointer dark:text-gray-300 text-gray-500">
+                                      My Api
                                    </p>
                               </a>
                               <a
-                                className="-m-3 cursor-pointer text-center  items-start rounded-lg hover:bg-gray-50"
+                               onClick={logoutHandler}
+                                className="-m-3 cursor-pointer text-center  items-start rounded-lg hover:bg-gray-700"
                               >
                                       <p style={{color:"red"}}  className="text-base text-center dark:text-gray-300 text-red-500">
                                       logout
@@ -221,7 +244,7 @@ const Layout = ({ children, title }) => {
                   </>
                 )}
               </Popover>
-
+              </>
               )}
             </div>
           </div>
@@ -278,7 +301,7 @@ const Layout = ({ children, title }) => {
                   </nav>
                 </div>
               </div>
-              {!userInfo ? (
+              {!Cookies.get('userInfo') ? (
               <div className="py-6 px-5 space-y-6">
                 <div>
                   <a
@@ -300,19 +323,23 @@ const Layout = ({ children, title }) => {
               </div>): 
                   <div className="py-4 px-4 space-x-4 flex">
                       
-                      <div className="relative flex-shrink-0 px-2">
-                      <Image src={profile} alt="" className="w-12 h-12 border rounded-full dark:bg-coolGray-500 dark:border-coolGray-700"/>
-                   </div> 
+                        <h1 className="font-medium py-3 px-4 cursor-pointer text-gray-100">{name}</h1>
 
-                      <Link href="/profile" passHref>
-                        <h1 className="font-medium py-3 px-4 cursor-pointer">Profile</h1>
+                        <Link href="/newcode" passHref>
+                <button className=" px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                    New
+                </button>
+                </Link>
+                <Link href="/newquestion" passHref>
+                        <h1 className="font-medium py-3 px-4 cursor-pointer dark:text-gray-300">Ask</h1>
                       </Link>
 
-                      <Link href="/order-history" passHref>
-                        <h1 className="font-medium py-3 px-4 cursor-pointer">Orders</h1>
+                      <Link href="/myapi" passHref>
+                        <h1 className="font-medium py-3 px-4 cursor-pointer dark:text-gray-300">My Api</h1>
                       </Link>
 
-                      <div >
+                      <div 
+                       onClick={logoutHandler}>
                         <h1 className="font-medium py-3 px-4 cursor-pointer" style={{color: "red"}}>Logout</h1>
                       </div>
 

@@ -5,17 +5,17 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import ReactPaginate from "react-paginate";
 
-const Search = () => {
+const Community = () => {
     const router = useRouter()
     const[search, setSearch] = useState("")
-    const[loading, setLoading] = useState(true)
+    const[loading, setLoading] = useState(false)
     const[data, setData] = useState([])
 
     const submitHandler = async(e):Promise<void> =>{
       e.preventDefault()
       setLoading(true)
         try{
-          const result = await axios.post('http://localhost:8000/look', {search})
+          const result = await axios.post('http://localhost:8000/community/search', {search})
           setData(result.data)
     }catch(e){
         console.log(e)
@@ -23,10 +23,10 @@ const Search = () => {
     setLoading(false)
     }
 
-    const handlePageClick = async(data):Promise<any> =>{
+     const handlePageClick = async(data):Promise<any> =>{
         setLoading(true)
         try{
-          const result = await axios.post(`http://localhost:8000/look?page=${data.selected}`, {search})
+          const result = await axios.post(`http://localhost:8000/community/search?page=${data.selected}`, {search})
           setData(result.data)
         }catch(e){
           console.log(e)
@@ -39,7 +39,7 @@ const Search = () => {
         var result
         const fetch  = async():Promise<void> =>{
             try{
-                 result = await axios.get('http://localhost:8000/getApis')
+                 result = await axios.get('http://localhost:8000/getQuestions')
                  setData(result.data)
             }catch(e){
                 console.log(e)
@@ -103,14 +103,14 @@ const Search = () => {
         <div >
             {console.log(data)}
         {data.length>0 ? data.map( (d) =>(
-          <div onClick={()=>router.push(`/code/${d._id}`)} key={d._id} className="p-6 mx-16 mt-4 sm:p-12 cursor-pointer bg-gray-100 dark:bg-gray-800 dark:text-coolGray-100">
+          <div onClick={()=>router.push(`/question/${d._id}`)} key={d._id} className="p-6 mx-16 mt-4 sm:p-12 cursor-pointer bg-gray-100 dark:bg-gray-800 dark:text-coolGray-100">
             <div className="flex flex-col space-y-4 md:space-y-0 md:space-x-6 md:flex-row">
               <img
                 src="https://source.unsplash.com/75x75/?portrait"
                 alt=""
                 className="self-center flex-shrink-0 w-24 h-24 border rounded-full md:justify-self-start dark:bg-coolGray-500 dark:border-coolGray-700"
               />
-              <div className="flex flex-col">
+              <div className="flex pl-4 flex-col">
                 <h4 className="text-lg font-semibold text-center md:text-left  dark:text-gray-300">
                   {d.email}
                   
@@ -118,9 +118,6 @@ const Search = () => {
                 <div  className="space-y-6">
                 <p className="text-base  mt-0 mb-4 text-gray-300">
                     {d.description}  
-                    </p>
-                    <p className="text-base bg-indigo-600 w-fit p-2 bg-opacity-25 rounded-md mt-0 mb-4 text-gray-300">
-                    {d.language}  
                     </p>
                     </div>
               </div>
@@ -161,4 +158,4 @@ const Search = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(Search), {ssr: false});
+export default dynamic(() => Promise.resolve(Community), {ssr: false});

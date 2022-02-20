@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import axios from 'axios'
 import dynamic from "next/dynamic";
+import Cookies from 'js-cookie'
 import { useRouter } from "next/router";
 import ReactPaginate from "react-paginate";
 
-const Search = () => {
+const Myapi = () => {
     const router = useRouter()
     const[search, setSearch] = useState("")
     const[loading, setLoading] = useState(true)
@@ -26,7 +27,7 @@ const Search = () => {
     const handlePageClick = async(data):Promise<any> =>{
         setLoading(true)
         try{
-          const result = await axios.post(`http://localhost:8000/look?page=${data.selected}`, {search})
+          const result = await axios.post(`http://localhost:8000/see?page=${data.selected}`, {search})
           setData(result.data)
         }catch(e){
           console.log(e)
@@ -35,11 +36,18 @@ const Search = () => {
     }
 
     useEffect(():void => {
+        if(!Cookies.get('userInfo')){
+            router.push('/auth/login')
+        }
         setLoading(true)
         var result
+        
+        const data = JSON.parse(Cookies.get('userInfo'))
+        const name = data.email
+        const token  = data.token
         const fetch  = async():Promise<void> =>{
             try{
-                 result = await axios.get('http://localhost:8000/getApis')
+                 result = await axios.post('http://localhost:8000/see', {search, name, token})
                  setData(result.data)
             }catch(e){
                 console.log(e)
@@ -58,7 +66,7 @@ const Search = () => {
           </div>
             </div>}
 
-    <Layout title="Search">
+    <Layout title="Myapi">
     
         
       <div style={{ minHeight: "90vh" }} className="dark:bg-gray-900 ">
@@ -99,6 +107,19 @@ const Search = () => {
           </div>
           
         </div>
+
+        <div className="flex justify-center py-5">
+            
+    <div className="flex border-b border-gray-200 space-x-4 dark:border-gray-700">
+        <button className="h-10 cursor-pointer py-2 -mb-px text-sm text-center text-blue-600 bg-transparent border-b-2 border-blue-500 sm:text-base dark:border-blue-400 dark:text-blue-300 whitespace-nowrap focus:outline-none">
+            Public
+        </button>
+
+        <button onClick={()=>router.push('/mypapi')} className="h-10 cursor-pointer py-2 -mb-px text-sm text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:text-base dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
+            Private
+        </button>
+    </div>
+        </div>
         {/* results */}
         <div >
             {console.log(data)}
@@ -118,9 +139,6 @@ const Search = () => {
                 <div  className="space-y-6">
                 <p className="text-base  mt-0 mb-4 text-gray-300">
                     {d.description}  
-                    </p>
-                    <p className="text-base bg-indigo-600 w-fit p-2 bg-opacity-25 rounded-md mt-0 mb-4 text-gray-300">
-                    {d.language}  
                     </p>
                     </div>
               </div>
@@ -161,4 +179,4 @@ const Search = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(Search), {ssr: false});
+export default dynamic(() => Promise.resolve(Myapi), {ssr: false});

@@ -1,11 +1,23 @@
 import type { NextPage } from "next";
 import Image from "next/image";
 import Layout from "../components/Layout";
-import dynamic from "next/dynamic";
+import dynamic from "next/dynamic"
+import Link from "next/link";
+import Cookies from 'js-cookie'
+import {useRouter} from 'next/router'
+import { useEffect } from "react";
+
 
 const Home: NextPage = () => {
+  const router = useRouter()
   const backUrl: string =
-    "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80";
+    "https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80";
+
+  useEffect(()=>{
+      if(Cookies.get('userInfo')){
+        router.push('/myapi')
+      }
+  },[])
 
   return (
     <Layout title="Home">
@@ -20,10 +32,12 @@ const Home: NextPage = () => {
                   Write and get Free APIs{" "}
                 {/* <span className="text-blue-400 underline">Saas</span> */}
               </h1>
+              <Link href="/auth/register" passHref>
               <button className="w-full px-4 py-2 mt-4 text-sm font-medium text-white uppercase transition-colors duration-200 transform bg-indigo-600 rounded-md lg:w-auto hover:bg-indigo-500 focus:outline-none focus:bg-indigo-500">
                 Join us
-              </button>
-            </div>
+                </button>
+                </Link>
+              </div>
           </div>
         </div>
 

@@ -62,6 +62,9 @@ const Codes = () => {
                 <p  className="text-base  mt-0 mb-4 text-gray-300">
                 {data.desc}
                 </p>
+                <p className="text-base bg-indigo-600 w-fit p-2 bg-opacity-25 rounded-md mt-0 mb-4 text-gray-300">
+                    {data.language}  
+                    </p>
                 </div>
               </div>
             </div>
