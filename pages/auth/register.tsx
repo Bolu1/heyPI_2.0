@@ -150,7 +150,7 @@ const Register = () => {
                   <p className="mt-6 text-sm text-center text-gray-400">
                     Already have an account?{" "}
                     <a
-                      href="/auth/login"
+                      onClick={()=>router.push("/auth/login")}
                       className="text-blue-500 focus:outline-none focus:underline hover:underline"
                     >
                       Sign in

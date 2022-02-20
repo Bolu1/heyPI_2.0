@@ -59,7 +59,7 @@ const Codes = () => {
                   
                 </h4>
                 <div className="space-y-6 dark:text-gray-300">
-                <p  className="text-base  mt-0 mb-4 text-gray-300">
+                <p  className="text-base text-center mt-0 mb-4 text-gray-300">
                 {data.desc}
                 </p>
                 <p className="text-base bg-indigo-600 w-fit p-2 bg-opacity-25 rounded-md mt-0 mb-4 text-gray-300">
@@ -74,7 +74,7 @@ const Codes = () => {
             </div>
             
             </>: 
-            <div className="dark:text-gray-300 pt-20 text-3xl fount-medium flex align-center justify-center">Opps we could not find that</div>
+            <div className="dark:text-gray-300 pt-20 text-3xl fount-medium flex align-center justify-center"></div>
            }
                
 

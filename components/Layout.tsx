@@ -214,7 +214,8 @@ const Layout = ({ children, title }) => {
                         <div className="rounded-lg text-center shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
                           <div className="relative text-center grid gap-2 bg-white dark:bg-gray-800  py-1 sm:gap-8 sm:p-8">
                           <a 
-                              href='/newquestion'
+                              
+                      onClick={()=>router.push("/newquestion")}
                                 className="-m-3 cursor-pointer text-center  items-start rounded-lg hover:bg-gray-700"
                               >
                                       <p  className="text-base text-center cursor-pointer dark:text-gray-300 text-gray-500">
@@ -222,7 +223,8 @@ const Layout = ({ children, title }) => {
                                    </p>
                               </a>
                               <a 
-                              href='/myapi'
+                              
+                      onClick={()=>router.push("/myapi")}
                                 className="-m-3 cursor-pointer text-center  items-start rounded-lg hover:bg-gray-700"
                               >
                                       <p  className="text-base text-center cursor-pointer dark:text-gray-300 text-gray-500">

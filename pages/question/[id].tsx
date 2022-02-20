@@ -8,6 +8,12 @@ import ReactPaginate from "react-paginate";
 const Question = () => {
     const router = useRouter()
     const[search, setSearch] = useState("")
+    const[q, setQ] = useState({
+      email: null,
+      description: null,
+      desc: null,
+      language: null
+  })
     const[loading, setLoading] = useState(true)
     const[data, setData] = useState([])
 
@@ -27,6 +33,7 @@ const Question = () => {
         setLoading(true)     
         try{
           const{id} = router.query
+          console.log(id)
           const result = await axios.post(`http://localhost:8000//answers?page=${data.selected}`, {id})
           setData(result.data)
         }catch(e){
@@ -37,13 +44,17 @@ const Question = () => {
 
     useEffect(():void => {
         setLoading(true)
+        var quest
         var result
         const fetch  = async():Promise<void> =>{
             try{
               const{id} = router.query
-              console.log(id)
+              const idd = id
+              console.log(idd)
+                quest = await axios.get(`http://localhost:8000/findQuestions?id=${id}`)
                  result = await axios.post('http://localhost:8000/answers', {id})
-                 console.log(result)
+                 console.log(quest)
+                 setQ(quest.data)
                  setData(result.data)
             }catch(e){
                 console.log(e)
@@ -66,42 +77,40 @@ const Question = () => {
     
         
       <div style={{ minHeight: "90vh" }} className="dark:bg-gray-900 ">
-        <div className="flex justify-center py-10">
-          <div className="mb-3 xl:w-96">
-            <form onSubmit={submitHandler} className="input-group relative flex  items-stretch w-full mb-4 rounded">
-              <input
-                type="search"
-                className="form-control dark:bg-gray-700 dark:text-white relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0   focus:border-blue-600 focus:outline-none"
-                placeholder="Search"
-                aria-label="Search"
-                aria-describedby="button-addon2"
-                value={search}
-                onChange={(e)=>setSearch(e.target.value)}
+      <br/>
+      <div  className="p-6 mx-16  sm:p-12 cursor-pointer bg-gray-100 dark:bg-gray-800 dark:text-coolGray-100">
+            <div className="flex flex-col space-y-4 md:space-y-0 md:space-x-6 md:flex-row">
+              <img
+                src="https://source.unsplash.com/75x75/?portrait"
+                alt=""
+                className="self-center flex-shrink-0 w-24 h-24 border rounded-full md:justify-self-start dark:bg-coolGray-500 dark:border-coolGray-700"
               />
-              <span
-                className="input-group-text flex items-center cursor-pointer px-3 py-1.5 text-base font-normal text-gray-700 text-center whitespace-nowrap rounded"
-                id="basic-addon2"
-              >
-                <svg
-                  aria-hidden="true"
-                  focusable="false"
-                  data-prefix="fas"
-                  data-icon="search"
-                  className="w-4 cursor-pointer"
-                  role="img"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 512 512"
-                  onClick={submitHandler}
+              <div className="flex flex-col">
+                <h4 className="text-lg font-semibold text-center md:text-left  dark:text-gray-300">
+                  {q.email}
+                  
+                </h4>
+                <div  className="space-y-6">
+                <p className="text-base text-center mt-0 mb-4 text-gray-300">
+                    {q.description}  
+                    </p>
+                    <p  className="text-base text-center bg-indigo-600 bg-opacity-25 rounded-md mt-0 mb-4 text-gray-300">
+                    {q.language}  
+                    </p>
+                    </div>
+              </div>
+            </div>
+            </div>
+
+
+        <div className="flex justify-center py-10 space-x-4">
+          <h1 className="text-white text-3xl font-medium">Answers</h1>
+          <a
+                  onClick={() => router.push(`/newcode?id=${router.query.id}`)}
+                  className="ml-8 cursor-pointer whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
                 >
-                  <path
-                    fill="currentColor"
-                    d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"
-                  ></path>
-                </svg>
-              </span>
-            </form>
-          </div>
-          
+                  +
+                </a>
         </div>
         {/* results */}
         <div >
@@ -120,14 +129,14 @@ const Question = () => {
                   
                 </h4>
                 <div  className="space-y-6">
-                <p className="text-base  mt-0 mb-4 text-gray-300">
+                <p className="text-base text-center mt-0 mb-4 text-gray-300">
                     {d.description}  
                     </p>
                     </div>
               </div>
             </div>
             </div> )): 
-            <div className="dark:text-gray-300  text-3xl fount-medium flex align-center justify-center">Opps we could not find that</div>
+            <div className="dark:text-gray-300  text-3xl fount-medium flex align-center justify-center">This question does not have any answer yet</div>
             }
           </div>
       </div>

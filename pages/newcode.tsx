@@ -16,8 +16,11 @@ const Newcode = () => {
     const submitHandler = async():Promise<void> =>{
         setLoading(true)
         try{
-            await axios.post("http://localhost:8000/addc", {description, code, language})
+            const{id} = router.query
+            console.log(id)
+            await axios.post("http://localhost:8000/addc", {description, code, language, id})
             console.log("added")
+            router.back()
         }catch(err){
             console.log(err)
         }
@@ -31,7 +34,7 @@ const Newcode = () => {
 
   return (
 
-    <div className="dark:bg-gray-900 my-5 dark:text-coolGray-100">
+    <div className="dark:bg-gray-900 dark:text-coolGray-100">
         
         {loading && <div style={{width:"100%", height:"100vh", paddingLeft:"48%"}} className="fixed pt-80 opacity-60 bg-indigo-600">
           <div style={{top:"50vh", left:"50%"}}>

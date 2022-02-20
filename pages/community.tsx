@@ -116,8 +116,11 @@ const Community = () => {
                   
                 </h4>
                 <div  className="space-y-6">
-                <p className="text-base  mt-0 mb-4 text-gray-300">
+                <p className="text-base  mt-0 mb-4 text-center text-gray-300">
                     {d.description}  
+                    </p>
+                    <p className="text-base bg-indigo-600 w-fit p-2 bg-opacity-25 rounded-md mt-0 mb-4 text-gray-300">
+                    {d.language}  
                     </p>
                     </div>
               </div>
