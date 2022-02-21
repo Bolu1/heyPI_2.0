@@ -60,7 +60,7 @@ const Register = () => {
               <div className="flex-1">
                 <div className="text-center">
                   <h2 className="text-4xl font-bold text-center text-gray-700 dark:text-white">
-                    Signup
+                    Signin
                   </h2>
                   {message == "Auth successsful" && 
                 <p className="mt-3 text-green-600 dark:text-green-600">
@@ -127,7 +127,7 @@ const Register = () => {
                       onClick={()=>router.push("/auth/register")}
                       className="text-blue-500 focus:outline-none focus:underline hover:underline"
                     >
-                      Sign in
+                      Sign up
                     </a>
                     .
                   </p>
