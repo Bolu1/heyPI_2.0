@@ -1,48 +1,52 @@
 import React, { useState } from "react";
 import Layout from "../../components/Layout";
-import axios from 'axios'
+import axios from "axios";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 
 const Register = () => {
-    const router = useRouter()
+  const router = useRouter();
   const backUrl: string =
-  "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80" 
-  const[loading, setLoading] = useState(false)
-  const[email, setEmail] = useState("")
-  const[password, setPassword] = useState("")
-  const[confirmPassword, setConfirmPassword] = useState("")
-  const[message, setMessage] = useState(null)
+    "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80";
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState(null);
 
-  const registerHandler = async(e):Promise<any> =>{
-        e.preventDefault()
-        setLoading(true)
-                try{
+  const registerHandler = async (e): Promise<any> => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "https://heypiserver.herokuapp.com/allow",
+        { email, password }
+      );
+      console.log(response);
+      Cookies.set("userInfo", JSON.stringify(response.data), {expires: 1/24});
+      setMessage(response.data.message);
+      router.push("/myapi");
+    } catch (e) {
+      console.log(e);
+      setMessage("Invalid Login Parameters");
+    }
 
-                    const response = await axios.post("http://localhost:8000/allow", {email, password})
-                    console.log(response)
-                    Cookies.set('userInfo', JSON.stringify(response.data))
-                    setMessage(response.data.message)
-                    router.push("/myapi")
-                }catch(e){
-                    console.log(e)
-                    setMessage("Invalid Login Parameters")
-                  }
-
-        setLoading(false)
-
-  }
-
+    setLoading(false);
+  };
 
   return (
     <div>
-        
-      {loading && <div style={{width:"100%", height:"100vh", paddingLeft:"48%"}} className="fixed pt-80 opacity-60 bg-indigo-600">
-          <div style={{top:"50vh", left:"50%"}}>
-            <div  className="w-16 h-16 border-4 border-dashed rounded-full animate-spin dark:border-violet-400"></div>
+      {loading && (
+        <div
+          style={{ width: "100%", height: "100vh", paddingLeft: "48%" }}
+          className="fixed pt-80 opacity-60 bg-indigo-600"
+        >
+          <div style={{ top: "50vh", left: "50%" }}>
+            <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin dark:border-violet-400"></div>
           </div>
-            </div>}
+        </div>
+      )}
 
       <Layout title="Register">
         <div className="bg-white dark:bg-gray-900">
@@ -51,9 +55,7 @@ const Register = () => {
               className="hidden bg-cover lg:block lg:w-2/3"
               style={{ backgroundImage: `url(${backUrl})` }}
             >
-              <div className="flex items-center h-full px-20 bg-gray-900 bg-opacity-40">
-                
-              </div>
+              <div className="flex items-center h-full px-20 bg-gray-900 bg-opacity-40"></div>
             </div>
 
             <div className="flex items-center w-full max-w-md px-6 mx-auto lg:w-2/6">
@@ -62,28 +64,29 @@ const Register = () => {
                   <h2 className="text-4xl font-bold text-center text-gray-700 dark:text-white">
                     Signin
                   </h2>
-                  {message == "Auth successsful" && 
-                <p className="mt-3 text-green-600 dark:text-green-600">
-                    {message}
-                  </p>}
+                  {message == "Auth successsful" && (
+                    <p className="mt-3 text-green-600 dark:text-green-600">
+                      {message}
+                    </p>
+                  )}
 
-                {message && message != "Auth successsful"&& 
-                <p className="mt-3 text-red-600 dark:text-red-600">
-                    {message}
-                  </p>}
-                  
+                  {message && message != "Auth successsful" && (
+                    <p className="mt-3 text-red-600 dark:text-red-600">
+                      {message}
+                    </p>
+                  )}
                 </div>
 
                 <div className="mt-8">
-                  <form  onSubmit={registerHandler}>
+                  <form onSubmit={registerHandler}>
                     <div>
                       <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
                         Email Address
                       </label>
                       <input
-                         required
-                         value={email}
-                         onChange={(e)=>setEmail(e.target.value)}
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         name="email"
                         id="email"
                         placeholder="example@example.com"
@@ -101,7 +104,7 @@ const Register = () => {
                       <input
                         required
                         value={password}
-                        onChange={(e)=>setPassword(e.target.value)}
+                        onChange={(e) => setPassword(e.target.value)}
                         type="password"
                         name="password"
                         id="password"
@@ -110,12 +113,11 @@ const Register = () => {
                       />
                     </div>
 
-                      
-
                     <div className="mt-6">
-                      <button 
-                       type="submit"
-                      className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-indigo-600 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                      <button
+                        type="submit"
+                        className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-indigo-600 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+                      >
                         Sign up
                       </button>
                     </div>
@@ -124,7 +126,7 @@ const Register = () => {
                   <p className="mt-6 text-sm text-center text-gray-400">
                     Don&apost have an account?{" "}
                     <a
-                      onClick={()=>router.push("/auth/register")}
+                      onClick={() => router.push("/auth/register")}
                       className="text-blue-500 focus:outline-none focus:underline hover:underline"
                     >
                       Sign up
