@@ -10,14 +10,21 @@ const Newcode = () => {
   const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState("");
   const [language, setLanguage] = useState("");
+  const [name, setName] = useState("")
   const [code, setCode] = useState("");
 
   const submitHandler = async (): Promise<void> => {
     setLoading(true);
     try {
       const { id } = router.query;
+      if(Cookies.get('userInfo')){
+        const data = JSON.parse(Cookies.get('userInfo'))
+        const n = data.email.split("@")
+        setName(n[0])
+     }
       console.log(id);
       await axios.post("https://heypiserver.herokuapp.com/addc", {
+        name,
         description,
         code,
         language,
